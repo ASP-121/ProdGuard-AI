@@ -18,8 +18,6 @@
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [API Reference](#-api-reference)
-- [Team](#-team)
-
 ---
 
 ## 🎯 Problem Statement
