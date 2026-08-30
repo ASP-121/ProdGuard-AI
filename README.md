@@ -18,8 +18,6 @@
 - [Project Structure](#-project-structure)
 - [Getting Started](#-getting-started)
 - [API Reference](#-api-reference)
-- [Team](#-team)
-
 ---
 
 ## 🎯 Problem Statement
@@ -397,6 +395,7 @@ Click **"Load Preset Scenarios"** in the header to instantly test:
 - **ML Training Data** — Model trained on UCI AI4I 2020 Predictive Maintenance Dataset.
 
 ---
+<<<<<<< HEAD
 
 ## 👥 Team
 
@@ -420,3 +419,5 @@ This project was built as a **hackathon prototype** for demonstration purposes.
   <strong>ProdGuard AI</strong> · AI-Enabled Production Disruption Early Warning System<br/>
   <em>Turning reactive firefighting into proactive operational intelligence.</em>
 </div>
+=======
+>>>>>>> 84ff682833d3740cfad4b9e7e3b7b685e4a473ff
