@@ -46,9 +46,6 @@ export default function Header({
               <span className="live-dot"></span> Line 4 · Unit B
             </span>
           </div>
-          <p className="header-subtitle">
-            Proactive early warning uniting machine telemetry, supply buffer, and workforce signals
-          </p>
         </div>
       </div>
 
