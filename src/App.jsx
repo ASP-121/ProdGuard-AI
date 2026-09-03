@@ -22,6 +22,13 @@ import {
   getStoredActionStates, saveStoredActionStates,
   getStoredWorkflow, saveStoredWorkflow
 } from './utils/riskUtils';
+import {
+  savePredictionToDb,
+  fetchHistoryFromDb,
+  clearHistoryFromDb,
+  saveWorkflowToDb,
+  fetchWorkflowFromDb
+} from './services/supabase';
 
 export default function App() {
   // =========================================================================
@@ -74,6 +81,7 @@ export default function App() {
       setHistory(prev => {
         const next = [historyItem, ...prev.slice(0, 9)];
         saveStoredHistory(next);
+        savePredictionToDb(historyItem);
         return next;
       });
 
@@ -84,6 +92,7 @@ export default function App() {
           lastUpdated: currentTime
         };
         saveStoredWorkflow(next);
+        saveWorkflowToDb(next);
         return next;
       });
     } catch (err) {
@@ -99,6 +108,25 @@ export default function App() {
     const initApp = async () => {
       const isHealthy = await checkBackendHealth();
       setBackendConnected(isHealthy);
+
+      // Attempt to fetch from Supabase
+      try {
+        const [remoteHistory, remoteWorkflow] = await Promise.all([
+          fetchHistoryFromDb(10),
+          fetchWorkflowFromDb('INC-1042')
+        ]);
+        if (remoteHistory && remoteHistory.length > 0) {
+          setHistory(remoteHistory);
+          saveStoredHistory(remoteHistory);
+        }
+        if (remoteWorkflow) {
+          setWorkflowState(remoteWorkflow);
+          saveStoredWorkflow(remoteWorkflow);
+        }
+      } catch (err) {
+        console.warn('Initial Supabase sync fallback:', err);
+      }
+
       executeAnalysis(PRESETS[0].data);
     };
     initApp();
@@ -126,6 +154,7 @@ export default function App() {
     if (window.confirm('Are you sure you want to clear all prediction history?')) {
       setHistory([]);
       saveStoredHistory([]);
+      clearHistoryFromDb();
     }
   };
 
@@ -134,6 +163,11 @@ export default function App() {
       setFormData(item.input_data);
       executeAnalysis(item.input_data);
     }
+  };
+
+  const handleSaveWorkflow = (workflow) => {
+    saveStoredWorkflow(workflow);
+    saveWorkflowToDb(workflow);
   };
 
   // =========================================================================
@@ -211,7 +245,7 @@ export default function App() {
                   workflowState={workflowState}
                   setWorkflowState={setWorkflowState}
                   predictionResult={predictionResult}
-                  onSaveWorkflow={saveStoredWorkflow}
+                  onSaveWorkflow={handleSaveWorkflow}
                 />
               } />
 
