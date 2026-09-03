@@ -1,86 +1,93 @@
-# ProdGuard AI 🏭
+# 🏭 ProdGuard AI — Production Disruption Early Warning System
 
-### AI-Enabled Production Disruption Early Warning System
+> **AI-Enabled Proactive Manufacturing Intelligence Platform**  
+> Built for TCS Hackathon · Powered by Gradient Boosting ML + FastAPI + React + Supabase
 
-> **TCS Hackathon Project** — Proactively preventing manufacturing line disruptions by unifying machine telemetry, supply chain, workforce, and quality signals into a single intelligent dashboard.
-
----
-
-## 📋 Table of Contents
-
-- [Problem Statement](#-problem-statement)
-- [Solution Overview](#-solution-overview)
-- [Demo Preview](#-demo-preview)
-- [Tech Stack](#-tech-stack)
-- [Architecture](#-architecture)
-- [Features](#-features)
-- [AI & ML Engine](#-ai--ml-engine)
-- [Project Structure](#-project-structure)
-- [Getting Started](#-getting-started)
-- [API Reference](#-api-reference)
----
-
-## 🎯 Problem Statement
-
-Manufacturing plant managers currently rely on **fragmented, siloed reports** spread across four independent systems:
-
-| Silo | System | Data |
-|------|--------|------|
-| 🔧 Machine Health | SCADA / IoT Sensors | Telemetry, vibration, thermal data |
-| 📦 Supply Chain | ERP System | Material delays, inventory levels |
-| 👷 Workforce | HR System | Shift absenteeism, shortage levels |
-| ✅ Quality | QA Reports | Scrap rate, defect counts, rework |
-
-By the time a manager pieces together all four reports, the line has **already stopped**. There is no unified proactive view.
+[![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
+[![React](https://img.shields.io/badge/React-19.2+-61DAFB?style=flat&logo=react)](https://react.dev/)
+[![React Router](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router)](https://reactrouter.com/)
+[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat&logo=supabase)](https://supabase.com/)
+[![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=flat&logo=scikit-learn)](https://scikit-learn.org/)
+[![Vite](https://img.shields.io/badge/Vite-8.2+-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 
 ---
 
-## 💡 Solution Overview
+## 📌 Problem Statement
 
-**ProdGuard AI** combines these four operational silos into a **single real-time early warning system** powered by a Gradient Boosting ML model and a Multi-Factor Disruption Risk Engine.
+Manufacturing plants currently rely on **fragmented, siloed reports** — disparate maintenance logs, supply chain spreadsheets, HR shift shortages, and QA defect logs. By the time plant managers connect the dots, machines have jammed, scrap rates have spiked, and assembly lines have halted.
 
-> **Key Value Proposition:** A **2 to 6-hour proactive intervention window** before line stoppage or heavy scrap accumulation occurs.
+**ProdGuard AI** bridges these silos by correlating **physical machine sensor telemetry** with **macro operational indicators** in real-time, delivering a **2 to 6-hour proactive intervention window** before line failure occurs.
 
-### How it works:
+---
+
+## 🎯 Key Capabilities
+
+| Capability | Description |
+|---|---|
+| 🤖 **Gradient Boosting Failure Predictor** | Machine Learning model predicts physical CNC failure probability from live SCADA telemetry |
+| 📊 **Multi-Factor Disruption Engine** | 0–100% composite index combining machine health, supply chain lag, labor gap, quality, and backlog |
+| 🗂️ **Multi-Page Modular Navigation** | Clean, uncluttered UI with dedicated routing across Dashboard, Assessment, RCA, Actions, Workflow, and History |
+| ☁️ **Cloud Database (Supabase)** | PostgreSQL persistence for telemetry audit logs and incident states, with offline resilience |
+| 👥 **Role-Based Persona Lenses** | Personalized operational views for Plant Managers, Line Supervisors, and Maintenance Leads |
+| 🎯 **Automated Root Cause Triage** | Instant threshold-based RCA identifying primary and secondary disruption drivers |
+| ✅ **Prescriptive Action SOPs** | Interactive mitigation checklists prioritized from P1 (Immediate) to P4 (Standard) |
+| 🔄 **5-Stage Incident Escalation** | Full lifecycle tracking: Detected → Analyzed → Action Assigned → In Progress → Resolved |
+
+---
+
+## 🏗️ System Architecture
 
 ```
-User Inputs Machine + Operational Parameters
-           ↓
-  React Frontend calls FastAPI Backend
-           ↓
-  Gradient Boosting ML Model (scikit-learn)
-  predicts Machine Failure Probability
-           ↓
-  Multi-Factor Disruption Risk Engine
-  calculates Overall Risk Score (0–100%)
-           ↓
-  Root Cause Analysis Engine identifies
-  which signals are driving the risk
-           ↓
-Dashboard displays:
-  ✓ Machine Failure Probability
-  ✓ Overall Disruption Risk Score
-  ✓ Risk Level (LOW / MEDIUM / HIGH / CRITICAL)
-  ✓ Priority Score for Triage
-  ✓ Ranked Root Causes
-  ✓ AI Recommended Actions
-  ✓ Natural Language Explanation
-  ✓ Incident Escalation Workflow
+┌────────────────────────────────────────────────────────────────────────┐
+│                        FRONTEND (React 19 + Vite 8)                    │
+│   Modular Multi-Page Routing via React Router v6                      │
+│                                                                        │
+│   /dashboard      /predict       /root-causes   /actions  /workflow    │
+│   ┌─────────────┐ ┌────────────┐ ┌────────────┐ ┌───────┐ ┌──────────┐ │
+│   │Overview KPIs│ │Dual-Layer  │ │Ranked RCA  │ │SOP    │ │5-Stage   │ │
+│   │Risk Gauge   │ │Telemetry   │ │AI Natural  │ │Task   │ │Incident  │ │
+│   │Factor Radar │ │Form        │ │Explanation │ │List   │ │Workflow  │ │
+│   └─────────────┘ └────────────┘ └────────────┘ └───────┘ └──────────┘ │
+└───────────────────────┬───────────────────────────────┬────────────────┘
+                        │ HTTP POST /predict            │ Cloud Database Sync
+                        │ JSON Telemetry                │ Real-time SQL (PostgREST)
+                        ▼                               ▼
+┌───────────────────────────────────────┐   ┌────────────────────────────┐
+│         BACKEND (FastAPI + ML)        │   │    DATABASE (Supabase)     │
+│                                       │   │                            │
+│  Pydantic Schema Validation           │   │  • prediction_history      │
+│  → Scikit-Learn Gradient Boosting ML  │   │  • workflow_incidents      │
+│  → Multi-Factor Disruption Engine     │   │  • Row-Level Security      │
+│  → Dynamic RCA & Action Matcher       │   │  • Real-time Audit Trail   │
+└───────────────────────────────────────┘   └────────────────────────────┘
 ```
 
 ---
 
-## 🖥️ Demo Preview
+## 🧠 AI & ML Engine
 
-| Section | Description |
-|---------|-------------|
-| **Dashboard KPI Cards** | Live machine failure probability, disruption risk, risk level, and priority score |
-| **Role Persona Lens** | Plant Manager · Line Supervisor · Maintenance Lead views |
-| **Risk Gauge** | Animated semi-circular arc gauge (0–100%) with color-coded thresholds |
-| **Risk Factor Charts** | Recharts bar & radar charts for 5 risk drivers |
-| **AI Explanation** | Natural language "Why is this happening?" synthesis |
-| **Incident Workflow** | 5-stage escalation lifecycle tracker |
-| **Prediction History** | 10-run local audit log with trajectory chart |
+### 1. Machine Failure Probability (GBM Classifier)
+- **Algorithm:** `sklearn.ensemble.GradientBoostingClassifier`
+- **Trained on:** Physical sensor telemetry (Machine Type, Air Temp, Process Temp, RPM, Torque, Tool Wear).
+- **Output:** \(P(\text{Machine Failure}) \in [0.0, 1.0]\).
+- **Advantage:** Captures complex, non-linear thermal-mechanical interactions (e.g. high torque coupled with cumulative tool wear accelerates breakdown exponentially).
+
+### 2. Multi-Factor Disruption Risk Formula
+```
+Disruption Risk = 0.40 × Machine_Risk
+                + 0.20 × Material_Delay_Risk
+                + 0.15 × Workforce_Shortage_Risk
+                + 0.15 × Quality_Defect_Risk
+                + 0.10 × Backlog_Pressure_Risk
+```
+
+### 3. Risk Level Classifications
+| Score Range | Risk Level | Operational State | Protocol |
+|---|---|---|---|
+| 0 – 30% | 🟢 **LOW** | Nominal Operations | Routine SCADA Monitoring |
+| 31 – 60% | 🟡 **MEDIUM** | Emerging Anomaly | Preventive Review |
+| 61 – 80% | 🟠 **HIGH** | Severe Threat | Supervisor Intervention |
+| 81 – 100% | 🔴 **CRITICAL** | Emergency Disruption | Immediate Line Escalation |
 
 ---
 
@@ -88,189 +95,72 @@ Dashboard displays:
 
 ### Frontend
 | Technology | Version | Purpose |
-|------------|---------|---------|
-| **React** | 19.2.8 | Component-based UI framework |
-| **Vite** | 8.2.2 | Build tool & HMR dev server |
-| **Recharts** | 3.10.1 | Interactive data visualizations |
-| **Lucide React** | 1.34.0 | Industrial icon system |
-| **Custom CSS3** | — | Industrial dark-mode design system |
-| **Fetch API + AbortController** | Native | Backend HTTP communication |
-| **localStorage** | Web Storage API | Prototype state persistence |
+|---|---|---|
+| **React** | 19.2+ | Component UI Framework |
+| **Vite** | 8.2+ | Fast Build Tool & Dev Server |
+| **React Router** | 6.30+ | Multi-Page Client-side Routing |
+| **@supabase/supabase-js** | Latest | Cloud Database Client |
+| **Recharts** | 3.10+ | Responsive Industrial Data Visualizations |
+| **Lucide React** | 1.34+ | Industrial SVG Icon Library |
+| **CSS3 Theme** | Custom | Industrial Cyber-Physical Dark Theme |
 
-### Backend & ML
+### Backend & Database
 | Technology | Version | Purpose |
-|------------|---------|---------|
-| **FastAPI** | Latest | REST API framework |
-| **Uvicorn** | 0.49.0 | ASGI production web server |
-| **Python** | 3.14.2 | Backend runtime |
-| **scikit-learn** | Latest | Gradient Boosting ML model |
-| **Pandas** | Latest | Feature engineering & OHE |
-| **Pydantic** | v2 | Request schema validation |
-| **Joblib** | Latest | Model serialization (.pkl) |
+|---|---|---|
+| **FastAPI** | 0.115+ | High-Performance REST API |
+| **Uvicorn** | 0.49+ | Production ASGI Web Server |
+| **Python** | 3.10+ | ML Inference Runtime |
+| **Scikit-Learn** | 1.4+ | Gradient Boosting Classifier |
+| **Pandas & Joblib** | Latest | Feature Transformations & Model Serialization |
+| **Supabase** | Cloud | Managed PostgreSQL Database & Auth |
 
 ---
 
-## 🏗️ Architecture
+## 📂 Project Structure
 
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                    BROWSER (React + Vite)                    │
-│                                                              │
-│  Role Switcher → KPI Cards → Risk Gauge → Charts            │
-│  Root Causes → Actions Checklist → AI Explanation           │
-│  Workflow Panel → Escalation → Prediction History           │
-└─────────────────────────┬───────────────────────────────────┘
-                          │ POST /predict (JSON)
-                          │ http://127.0.0.1:8000
-                          ▼
-┌─────────────────────────────────────────────────────────────┐
-│                  FASTAPI BACKEND (Python)                    │
-│                                                              │
-│  Pydantic Validation → Pandas Feature Matrix                 │
-│  → Gradient Boosting Model (predict_proba)                  │
-│  → Multi-Factor Risk Engine                                  │
-│  → Root Cause Threshold Checks                              │
-│  → Prescriptive Action Matcher                              │
-│  → JSON Response                                            │
-└─────────────────────────────────────────────────────────────┘
-```
-
----
-
-## ✨ Features
-
-### 🎭 Role-Based Persona Lenses
-Switch between three stakeholder views without separate logins:
-- **Plant Manager** — OEE, financial impact, delivery SLA, executive escalation
-- **Line Supervisor** — Workforce constraints, material staging, queue backlog
-- **Maintenance Lead** — CNC telemetry, tool wear, torque analysis, mechanical health
-
-### 📊 Prediction Dashboard
-- 4 dynamic KPI cards with color-coded risk indicators
-- Animated semi-circular SVG risk gauge (LOW → CRITICAL)
-- Risk Factor Composition chart (Bar + Radar view toggle)
-- Priority Metrics comparison chart
-- Prediction trajectory area chart
-
-### 🔍 Risk Assessment Form
-- Dual-layer input form (Physical Telemetry + Operational Signals)
-- Interactive sliders + number inputs with real-time value display
-- Client-side validation with descriptive error feedback
-- 4 one-click demo presets (Nominal / Supply Crunch / Mechanical Strain / Critical Crisis)
-
-### 🚦 Risk Prioritization
-- Ranked root cause cards with domain tags and operational impact
-- Top Priority Spotlight Hero card — *"What should I solve first?"*
-- Severity classification (Critical / High / Medium / Low)
-
-### ✅ AI Recommended Actions
-- Interactive execution checklist from backend recommendations
-- Priority tiers (P1 Immediate → P4 Standard)
-- Status toggles: Pending → In Progress → Completed
-- Progress bar: *"X of 4 Actions Completed"*
-- localStorage state persistence across sessions
-
-### 🤖 Natural Language AI Explanation
-- Dynamic *"Why is this happening?"* synthesis per risk level
-- *"Recommended Next Step"* directive
-- Role-specific operational lens insight
-- Proactive vs. reactive framing narrative
-
-### 🔄 Incident Workflow & Escalation
-- 5-stage lifecycle: Detected → Analyzed → Action Assigned → In Progress → Resolved
-- Team assignment (Maintenance / Quality / Supply Chain / Production Manager)
-- Shift notes & audit log
-- Simulated emergency escalation modal with incident ticket generation
-
-### 📜 Prediction History
-- Last 10 predictions stored locally
-- Table with Time, Machine Type, Risk Score, Risk Level, Priority Score
-- 1-click "Load Input" to replay any historical parameters
-- Risk trajectory area chart across runs
-
----
-
-## 🧠 AI & ML Engine
-
-### Machine Learning Model: Gradient Boosting Classifier
-```
-Input Features (Physical Sensors):
-  Type, Air Temperature, Process Temperature,
-  Rotational Speed, Torque, Tool Wear
-
-Model: scikit-learn GradientBoostingClassifier
-Output: P(Machine Failure) ∈ [0.0, 1.0]
-```
-
-### Multi-Factor Disruption Risk Formula
-```
-Overall Disruption Risk =
-  0.40 × Machine Risk   (from ML model)
-  0.20 × Material Delay Risk
-  0.15 × Workforce Shortage Risk
-  0.15 × Quality Defect Risk
-  0.10 × Backlog Pressure Risk
-
-Risk Levels:
-  0–30%   → LOW (Stable)
-  31–60%  → MEDIUM (Emerging Concern)
-  61–80%  → HIGH (Severe Risk)
-  81–100% → CRITICAL (Emergency)
-```
-
-### Root Cause Thresholds
-```
-P(Failure)    ≥ 50%     → Machine failure risk
-Material Delay ≥ 60 min  → Supply chain bottleneck
-Workforce      ≥ 15%     → Labor constraint
-Quality Rate   ≥ 5%      → Scrap / rework surge
-Backlog        ≥ 150 u   → Delivery commitment at risk
-```
-
-### Priority Score
-```
-Priority Score = 0.70 × Disruption Risk + 0.30 × Backlog Impact
-```
-
----
-
-## 📁 Project Structure
-
-```
-prodguard-ai/                       ← React + Vite Frontend
+prodguard-ai/                           ← Frontend Application Root
 ├── index.html
-├── vite.config.js
 ├── package.json
+├── vite.config.js
+├── supabase_schema.sql                 ← Supabase database setup script
 └── src/
+    ├── App.jsx                         ← Router configuration & state sync
     ├── main.jsx
-    ├── App.jsx                     ← Core orchestrator
-    ├── index.css                   ← Industrial dark-mode design system
-    ├── components/
-    │   ├── Sidebar.jsx             ← Navigation + backend status
-    │   ├── Header.jsx              ← Role switcher + presets + live clock
-    │   ├── RoleBanner.jsx          ← Persona-specific insight banner
-    │   ├── RiskCards.jsx           ← 4 KPI metric cards
-    │   ├── AlertCenter.jsx         ← Dynamic alert banners
-    │   ├── PredictionForm.jsx      ← Dual-layer telemetry input form
-    │   ├── RiskGauge.jsx           ← SVG semi-circular arc gauge
-    │   ├── RiskCharts.jsx          ← Recharts composition + comparison
-    │   ├── PredictionHistoryChart.jsx ← Trajectory area chart
-    │   ├── RootCauses.jsx          ← Ranked prioritization panel
-    │   ├── RecommendedActions.jsx  ← AI action checklist
-    │   ├── AIExplanation.jsx       ← NLG explanation section
-    │   ├── WorkflowPanel.jsx       ← Incident escalation workflow
-    │   └── PredictionHistory.jsx   ← Historical audit table
+    ├── index.css                       ← Industrial dark CSS design system
+    ├── pages/                          ← Modular Multi-Page Views
+    │   ├── Dashboard.jsx               ← KPIs, Risk Gauge, Factor Radar
+    │   ├── Prediction.jsx              ← Sensor telemetry input form
+    │   ├── RootCausesPage.jsx          ← RCA rankings + AI explanations
+    │   ├── ActionsPage.jsx             ← Prescriptive mitigation checklist
+    │   ├── WorkflowPage.jsx            ← Incident escalation lifecycle
+    │   └── HistoryPage.jsx             ← Historical trajectory & audit log
+    ├── components/                     ← Shared Reusable UI Components
+    │   ├── Sidebar.jsx                 ← Router navigation + API status
+    │   ├── Header.jsx                  ← Persona switcher + preset selector
+    │   ├── RoleBanner.jsx              ← Stakeholder-specific guidance
+    │   ├── RiskCards.jsx               ← 4 primary KPI metric tiles
+    │   ├── AlertCenter.jsx             ← Risk-adaptive advisory banners
+    │   ├── PredictionForm.jsx          ← Dual-layer sensor controls
+    │   ├── RiskGauge.jsx               ← Custom SVG radial arc gauge
+    │   ├── RiskCharts.jsx              ← Factor composition charts
+    │   ├── RootCauses.jsx              ← Ranked bottleneck cards
+    │   ├── RecommendedActions.jsx      ← SOP checklist with progress bar
+    │   ├── AIExplanation.jsx           ← NLG narrative engine
+    │   ├── WorkflowPanel.jsx           ← Incident stages & team assignment
+    │   └── PredictionHistory.jsx       ← Cloud/local audit trail table
     ├── services/
-    │   └── api.js                  ← Fetch API client (POST /predict)
+    │   ├── api.js                      ← FastAPI client (POST /predict)
+    │   └── supabase.js                 ← Supabase PostgreSQL client & queries
     └── utils/
-        ├── riskUtils.js            ← Risk calc, NLG engine, localStorage helpers
-        └── presets.js              ← 4 industrial demo scenarios
+        ├── riskUtils.js                ← Formula definitions & local fallback
+        └── presets.js                  ← 4 pre-calibrated industrial scenarios
 
-ml-service/                         ← FastAPI Backend
-├── app.py                          ← FastAPI app + ML pipeline
-├── train_model.py                  ← Model training script
-├── gradient_boosting_model.pkl     ← Trained ML model
-└── model_features.pkl              ← Feature alignment vector
+ml-service/                             ← Backend Application Root
+├── app.py                              ← FastAPI service + Disruption engine
+├── train_model.py                      ← Scikit-Learn training pipeline
+├── gradient_boosting_model.pkl         ← Pretrained Gradient Boosting model
+└── model_features.pkl                  ← One-Hot Encoded feature signature
 ```
 
 ---
@@ -278,67 +168,60 @@ ml-service/                         ← FastAPI Backend
 ## 🚀 Getting Started
 
 ### Prerequisites
-- **Python** 3.10+ (3.14 recommended)
+- **Python** 3.10+
 - **Node.js** 18+ and **npm** 9+
+- A free **Supabase** project account
 
 ---
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/YOUR_USERNAME/prodguard-ai.git
-cd prodguard-ai
-```
+### 1. Database Setup (Supabase)
+1. Go to your [Supabase Dashboard](https://supabase.com/dashboard) and open the **SQL Editor**.
+2. Copy and run the contents of [`supabase_schema.sql`](./supabase_schema.sql).
+3. Tables `prediction_history` and `workflow_incidents` will be created with Row-Level Security (RLS) configured for instant prototyping.
 
 ---
 
-### 2. Start the FastAPI Backend
+### 2. Start the Backend ML Service
 
 ```bash
+# Navigate to the backend directory
 cd ml-service
-pip install fastapi uvicorn scikit-learn pandas joblib
+
+# Install Python requirements
+pip install fastapi uvicorn scikit-learn pandas joblib pydantic
+
+# Launch the FastAPI server
 python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
-✅ Verify at: http://127.0.0.1:8000
-> Expected: `{"message": "ProdGuard AI ML Service is running"}`
-
-📖 Interactive API Docs: http://127.0.0.1:8000/docs
+- Backend API: `http://127.0.0.1:8000`
+- Interactive Swagger Documentation: `http://127.0.0.1:8000/docs`
 
 ---
 
-### 3. Start the React Frontend
-
-Open a **new terminal**:
+### 3. Start the Frontend Dashboard
 
 ```bash
+# In a new terminal, navigate to the frontend directory
 cd prodguard-ai
+
+# Install Node dependencies
 npm install
-npm run dev
+
+# Start Vite dev server
+npm start
 ```
 
-✅ Open in browser: **http://localhost:5173**
-
----
-
-### 4. Quick Demo
-
-Click **"Load Preset Scenarios"** in the header to instantly test:
-| Preset | Expected Risk Level |
-|--------|-------------------|
-| Nominal Operations | 🟢 LOW |
-| Supply Chain & Backlog Spike | 🟡 MEDIUM |
-| Tool Wear & Thermal Strain | 🟠 HIGH |
-| Critical Multi-Factor Crisis | 🔴 CRITICAL |
+- Access the Dashboard at: **`http://localhost:5173`**
 
 ---
 
 ## 📡 API Reference
 
 ### `POST /predict`
+Submits machine telemetry and plant parameters for disruption scoring.
 
-**Endpoint:** `http://127.0.0.1:8000/predict`
-
-**Request Body:**
+**Request Payload:**
 ```json
 {
   "Type": "M",
@@ -347,14 +230,14 @@ Click **"Load Preset Scenarios"** in the header to instantly test:
   "rotational_speed": 1500,
   "torque": 45.0,
   "tool_wear": 180,
-  "material_delay": 90,
-  "workforce_constraint": 18,
-  "quality_issue_rate": 7,
-  "production_backlog": 220
+  "material_delay": 90.0,
+  "workforce_constraint": 18.0,
+  "quality_issue_rate": 7.0,
+  "production_backlog": 220.0
 }
 ```
 
-**Response:**
+**Response Payload:**
 ```json
 {
   "machine_failure_probability": 3.0,
@@ -376,48 +259,21 @@ Click **"Load Preset Scenarios"** in the header to instantly test:
 }
 ```
 
-| Field | Type | Description |
-|-------|------|-------------|
-| `machine_failure_probability` | float | ML model output (0–100%) |
-| `overall_disruption_risk` | float | Composite disruption score (0–100%) |
-| `risk_level` | string | `LOW`, `MEDIUM`, `HIGH`, or `CRITICAL` |
-| `priority_score` | float | Triage urgency ranking (0–100) |
-| `root_causes` | list[str] | Detected bottlenecks above threshold |
-| `recommended_actions` | list[str] | Prescribed mitigation SOPs |
-
 ---
 
-## ⚠️ Known Limitations (Prototype)
+## 🎭 Pre-Calibrated Demo Scenarios
 
-- **localStorage persistence** — Workflow, action states, and prediction history are stored in the browser only. Not persisted server-side (by design for prototype).
-- **No authentication** — Single-dashboard prototype; role lenses are UI-only views.
-- **Escalation** — Simulated notification dispatch; no actual email or alerting integration.
-- **ML Training Data** — Model trained on UCI AI4I 2020 Predictive Maintenance Dataset.
+Quickly simulate real plant conditions using the **"Load Preset Scenarios"** dropdown:
 
----
-<<<<<<< HEAD
-
-## 👥 Team
-
-Built with ❤️ for the **TCS Hackathon**
-
-| Role | Contribution |
-|------|-------------|
-| **ML Engineer** | Gradient Boosting model training, FastAPI backend, risk scoring engine |
-| **Frontend Engineer** | React dashboard, Recharts visualizations, UX design system |
-| **Product / Domain** | Manufacturing domain logic, SOP mappings, escalation workflows |
+| Scenario | Primary Trigger | Expected Risk Level |
+|---|---|---|
+| 🟢 **Nominal Operations** | Balanced physical telemetry, minimal delays | **LOW** |
+| 🟡 **Supply Chain Crunch** | 90m material delay + 220-unit queue backlog | **MEDIUM** |
+| 🟠 **Mechanical Tool Wear** | 180-min tool degradation, high torque load | **HIGH** |
+| 🔴 **Compound Multi-Crisis** | Concurrently high torque, labor loss, and material shortage | **CRITICAL** |
 
 ---
 
 ## 📄 License
 
-This project was built as a **hackathon prototype** for demonstration purposes.
-
----
-
-<div align="center">
-  <strong>ProdGuard AI</strong> · AI-Enabled Production Disruption Early Warning System<br/>
-  <em>Turning reactive firefighting into proactive operational intelligence.</em>
-</div>
-=======
->>>>>>> 84ff682833d3740cfad4b9e7e3b7b685e4a473ff
+This project is licensed under the MIT License for prototype and academic evaluation purposes.
