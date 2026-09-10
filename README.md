@@ -1,12 +1,11 @@
 # 🏭 ProdGuard AI — Production Disruption Early Warning System
 
 > **AI-Enabled Proactive Manufacturing Intelligence Platform**  
-> Built for TCS Hackathon · Powered by Gradient Boosting ML + FastAPI + React + Supabase
+> Built for TCS Hackathon · Powered by Gradient Boosting ML + FastAPI + React
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688?style=flat&logo=fastapi)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-19.2+-61DAFB?style=flat&logo=react)](https://react.dev/)
 [![React Router](https://img.shields.io/badge/React_Router-v6-CA4245?style=flat&logo=react-router)](https://reactrouter.com/)
-[![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?style=flat&logo=supabase)](https://supabase.com/)
 [![Scikit-Learn](https://img.shields.io/badge/Scikit--Learn-ML-F7931E?style=flat&logo=scikit-learn)](https://scikit-learn.org/)
 [![Vite](https://img.shields.io/badge/Vite-8.2+-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
 
@@ -14,9 +13,9 @@
 
 ## 📌 Problem Statement
 
-Manufacturing plants currently rely on **fragmented, siloed reports** — disparate maintenance logs, supply chain spreadsheets, HR shift shortages, and QA defect logs. By the time plant managers connect the dots, machines have jammed, scrap rates have spiked, and assembly lines have halted.
+Manufacturing plants currently rely on **fragmented, siloed reports** — disparate maintenance logs, supply chain spreadsheets, HR shift shortage notices, and QA scrap reports. By the time plant supervisors connect these indicators, tooling has broken, queue backlogs have piled up, and assembly lines have stopped.
 
-**ProdGuard AI** bridges these silos by correlating **physical machine sensor telemetry** with **macro operational indicators** in real-time, delivering a **2 to 6-hour proactive intervention window** before line failure occurs.
+**ProdGuard AI** bridges this gap by unifying **physical machine SCADA telemetry** with **macro operational indicators** in real time, delivering a **2 to 6-hour proactive intervention window** before production disruptions occur.
 
 ---
 
@@ -24,14 +23,14 @@ Manufacturing plants currently rely on **fragmented, siloed reports** — dispar
 
 | Capability | Description |
 |---|---|
-| 🤖 **Gradient Boosting Failure Predictor** | Machine Learning model predicts physical CNC failure probability from live SCADA telemetry |
-| 📊 **Multi-Factor Disruption Engine** | 0–100% composite index combining machine health, supply chain lag, labor gap, quality, and backlog |
-| 🗂️ **Multi-Page Modular Navigation** | Clean, uncluttered UI with dedicated routing across Dashboard, Assessment, RCA, Actions, Workflow, and History |
-| ☁️ **Cloud Database (Supabase)** | PostgreSQL persistence for telemetry audit logs and incident states, with offline resilience |
-| 👥 **Role-Based Persona Lenses** | Personalized operational views for Plant Managers, Line Supervisors, and Maintenance Leads |
-| 🎯 **Automated Root Cause Triage** | Instant threshold-based RCA identifying primary and secondary disruption drivers |
-| ✅ **Prescriptive Action SOPs** | Interactive mitigation checklists prioritized from P1 (Immediate) to P4 (Standard) |
-| 🔄 **5-Stage Incident Escalation** | Full lifecycle tracking: Detected → Analyzed → Action Assigned → In Progress → Resolved |
+| 🤖 **Gradient Boosting Failure Predictor** | Machine Learning model predicting CNC machine failure probability from live physical sensor telemetry |
+| 📊 **Multi-Factor Disruption Engine** | 0–100% composite disruption index combining machine health, supply chain lag, labor gap, quality, and queue backlog |
+| 🗂️ **Multi-Page Modular Navigation** | Clean, responsive UI with dedicated routes across Dashboard, Assessment, RCA, Actions, Workflow, and History |
+| 👥 **Role-Based Persona Lenses** | Tailored operational lenses for Plant Managers, Line Supervisors, and Maintenance Leads |
+| 🎯 **Automated Root Cause Triage** | Instant threshold-based RCA identifying primary and secondary operational bottlenecks |
+| ✅ **Prescriptive Action SOPs** | Interactive mitigation checklists prioritized from P1 (Immediate) to P4 (Standard) with progress tracking |
+| 🔄 **5-Stage Incident Escalation** | Full incident lifecycle management: Detected → Analyzed → Action Assigned → In Progress → Resolved |
+| 📈 **Audit Trail & History Replay** | Session-persisted prediction history with 1-click telemetry reload and trajectory charts |
 
 ---
 
@@ -48,46 +47,71 @@ Manufacturing plants currently rely on **fragmented, siloed reports** — dispar
 │   │Risk Gauge   │ │Telemetry   │ │AI Natural  │ │Task   │ │Incident  │ │
 │   │Factor Radar │ │Form        │ │Explanation │ │List   │ │Workflow  │ │
 │   └─────────────┘ └────────────┘ └────────────┘ └───────┘ └──────────┘ │
-└───────────────────────┬───────────────────────────────┬────────────────┘
-                        │ HTTP POST /predict            │ Cloud Database Sync
-                        │ JSON Telemetry                │ Real-time SQL (PostgREST)
-                        ▼                               ▼
-┌───────────────────────────────────────┐   ┌────────────────────────────┐
-│         BACKEND (FastAPI + ML)        │   │    DATABASE (Supabase)     │
-│                                       │   │                            │
-│  Pydantic Schema Validation           │   │  • prediction_history      │
-│  → Scikit-Learn Gradient Boosting ML  │   │  • workflow_incidents      │
-│  → Multi-Factor Disruption Engine     │   │  • Row-Level Security      │
-│  → Dynamic RCA & Action Matcher       │   │  • Real-time Audit Trail   │
-└───────────────────────────────────────┘   └────────────────────────────┘
+└───────────────────────────────────┬────────────────────────────────────┘
+                                    │ HTTP POST /predict
+                                    │ JSON Telemetry Payload
+                                    ▼
+┌────────────────────────────────────────────────────────────────────────┐
+│                        BACKEND (FastAPI + ML Engine)                   │
+│                                                                        │
+│  Pydantic Schema Validation → Scikit-Learn Gradient Boosting ML        │
+│  → Multi-Factor Disruption Engine → Dynamic RCA & Action Matcher       │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 🧠 AI & ML Engine
+## 🧠 AI & ML Engine: Two-Tier Architecture
 
-### 1. Machine Failure Probability (GBM Classifier)
-- **Algorithm:** `sklearn.ensemble.GradientBoostingClassifier`
-- **Trained on:** Physical sensor telemetry (Machine Type, Air Temp, Process Temp, RPM, Torque, Tool Wear).
-- **Output:** \(P(\text{Machine Failure}) \in [0.0, 1.0]\).
-- **Advantage:** Captures complex, non-linear thermal-mechanical interactions (e.g. high torque coupled with cumulative tool wear accelerates breakdown exponentially).
+ProdGuard AI separates physical machine physics from overall plant disruptions through a **two-tier architecture**:
 
-### 2. Multi-Factor Disruption Risk Formula
 ```
-Disruption Risk = 0.40 × Machine_Risk
-                + 0.20 × Material_Delay_Risk
-                + 0.15 × Workforce_Shortage_Risk
-                + 0.15 × Quality_Defect_Risk
-                + 0.10 × Backlog_Pressure_Risk
+[ Tier 1: Physical Machine Model (GBM) ]
+Air Temp, Process Temp, Rotational Speed, Torque, Tool Wear, Machine Type
+                           │
+                           ▼ (100% Sensor Telemetry)
+               Machine Failure Probability
+                           │
+                           ▼ (Weighted at 40%)
+┌─────────────────────────────────────────────────────────────┐
+│          Tier 2: Multi-Factor Disruption Engine             │
+│                                                             │
+│   40%  Machine Health (from ML Model)                       │
+│   20%  Material Delay (Supply Chain Lag)                    │
+│   15%  Workforce Shortage (Labor Deficit)                   │
+│   15%  Quality Issue Rate (Scrap / Rework)                  │
+│   10%  Production Backlog (Queue Stress)                    │
+└─────────────────────────────────────────────────────────────┘
+                           │
+                           ▼
+             Overall Disruption Risk (0 - 100%)
 ```
+
+### 1. Gradient Boosting Classifier (scikit-learn)
+- **Inputs:** Machine Type, Air Temperature, Process Temperature, Rotational Speed (RPM), Torque, Tool Wear.
+- **Output:** $P(\text{Machine Failure}) \in [0.0, 1.0]$
+- **Physical Failure Modes Captured:**
+  - **Heat Dissipation Failure (HDF):** Driven by process and air temperature difference ($\Delta T$).
+  - **Power Failure (PWF):** Driven by torque and rotational speed product ($P = \tau \times \omega$).
+  - **Overstrain Failure (OSF):** Resulting from high torque on degraded cutting tools.
+  - **Tool Wear Failure (TWF):** Cumulative tooling degradation past critical wear limits.
+
+### 2. Multi-Factor Disruption Formula
+$$\begin{aligned}
+\text{Overall Risk} = &\ \mathbf{0.40} \times \text{Machine Risk (from ML Model)} \\
+&+ \mathbf{0.20} \times \text{Material Delay Risk} \\
+&+ \mathbf{0.15} \times \text{Workforce Shortage Risk} \\
+&+ \mathbf{0.15} \times \text{Quality Defect Risk} \\
+&+ \mathbf{0.10} \times \text{Production Backlog Risk}
+\end{aligned}$$
 
 ### 3. Risk Level Classifications
 | Score Range | Risk Level | Operational State | Protocol |
 |---|---|---|---|
 | 0 – 30% | 🟢 **LOW** | Nominal Operations | Routine SCADA Monitoring |
-| 31 – 60% | 🟡 **MEDIUM** | Emerging Anomaly | Preventive Review |
-| 61 – 80% | 🟠 **HIGH** | Severe Threat | Supervisor Intervention |
-| 81 – 100% | 🔴 **CRITICAL** | Emergency Disruption | Immediate Line Escalation |
+| 31 – 60% | 🟡 **MEDIUM** | Emerging Anomaly | Preventive Review & Buffer Verification |
+| 61 – 80% | 🟠 **HIGH** | Severe Threat | Shift Supervisor Intervention |
+| 81 – 100% | 🔴 **CRITICAL** | Emergency Disruption | Immediate Line Escalation & Maintenance Triage |
 
 ---
 
@@ -96,23 +120,24 @@ Disruption Risk = 0.40 × Machine_Risk
 ### Frontend
 | Technology | Version | Purpose |
 |---|---|---|
-| **React** | 19.2+ | Component UI Framework |
-| **Vite** | 8.2+ | Fast Build Tool & Dev Server |
-| **React Router** | 6.30+ | Multi-Page Client-side Routing |
-| **@supabase/supabase-js** | Latest | Cloud Database Client |
-| **Recharts** | 3.10+ | Responsive Industrial Data Visualizations |
-| **Lucide React** | 1.34+ | Industrial SVG Icon Library |
+| **React** | 19.2+ | Component-Based UI Framework |
+| **Vite** | 8.2+ | Fast Build Tool & Hot-Module Reloading Dev Server |
+| **React Router** | 6.30+ | Multi-Page Client-Side Application Routing |
+| **Recharts** | 3.10+ | Responsive Data Visualizations (Bar, Radar, Area) |
+| **Lucide React** | 1.34+ | Industrial SVG Icon System |
 | **CSS3 Theme** | Custom | Industrial Cyber-Physical Dark Theme |
+| **localStorage API** | Web API | Zero-config client-side state persistence |
 
-### Backend & Database
+### Backend & Machine Learning
 | Technology | Version | Purpose |
 |---|---|---|
-| **FastAPI** | 0.115+ | High-Performance REST API |
-| **Uvicorn** | 0.49+ | Production ASGI Web Server |
-| **Python** | 3.10+ | ML Inference Runtime |
-| **Scikit-Learn** | 1.4+ | Gradient Boosting Classifier |
-| **Pandas & Joblib** | Latest | Feature Transformations & Model Serialization |
-| **Supabase** | Cloud | Managed PostgreSQL Database & Auth |
+| **FastAPI** | 0.115+ | High-Performance Asynchronous REST API |
+| **Uvicorn** | 0.49+ | Production ASGI Server |
+| **Python** | 3.10+ | Backend Runtime |
+| **Scikit-Learn** | 1.4+ | Gradient Boosting ML Classifier |
+| **Pandas** | Latest | Tabular Feature Engineering & Alignment |
+| **Pydantic** | v2 | Request/Response Data Validation |
+| **Joblib** | Latest | Model Serialization & Loading |
 
 ---
 
@@ -123,9 +148,8 @@ prodguard-ai/                           ← Frontend Application Root
 ├── index.html
 ├── package.json
 ├── vite.config.js
-├── supabase_schema.sql                 ← Supabase database setup script
 └── src/
-    ├── App.jsx                         ← Router configuration & state sync
+    ├── App.jsx                         ← Router configuration & state management
     ├── main.jsx
     ├── index.css                       ← Industrial dark CSS design system
     ├── pages/                          ← Modular Multi-Page Views
@@ -148,12 +172,11 @@ prodguard-ai/                           ← Frontend Application Root
     │   ├── RecommendedActions.jsx      ← SOP checklist with progress bar
     │   ├── AIExplanation.jsx           ← NLG narrative engine
     │   ├── WorkflowPanel.jsx           ← Incident stages & team assignment
-    │   └── PredictionHistory.jsx       ← Cloud/local audit trail table
+    │   └── PredictionHistory.jsx       ← Audit trail history table
     ├── services/
-    │   ├── api.js                      ← FastAPI client (POST /predict)
-    │   └── supabase.js                 ← Supabase PostgreSQL client & queries
+    │   └── api.js                      ← FastAPI client (POST /predict)
     └── utils/
-        ├── riskUtils.js                ← Formula definitions & local fallback
+        ├── riskUtils.js                ← Risk formulas, NLG logic & local persistence
         └── presets.js                  ← 4 pre-calibrated industrial scenarios
 
 ml-service/                             ← Backend Application Root
@@ -170,18 +193,10 @@ ml-service/                             ← Backend Application Root
 ### Prerequisites
 - **Python** 3.10+
 - **Node.js** 18+ and **npm** 9+
-- A free **Supabase** project account
 
 ---
 
-### 1. Database Setup (Supabase)
-1. Go to your [Supabase Dashboard](https://supabase.com/dashboard) and open the **SQL Editor**.
-2. Copy and run the contents of [`supabase_schema.sql`](./supabase_schema.sql).
-3. Tables `prediction_history` and `workflow_incidents` will be created with Row-Level Security (RLS) configured for instant prototyping.
-
----
-
-### 2. Start the Backend ML Service
+### 1. Start the Backend (FastAPI ML Service)
 
 ```bash
 # Navigate to the backend directory
@@ -195,21 +210,21 @@ python -m uvicorn app:app --host 127.0.0.1 --port 8000 --reload
 ```
 
 - Backend API: `http://127.0.0.1:8000`
-- Interactive Swagger Documentation: `http://127.0.0.1:8000/docs`
+- Interactive API Documentation: `http://127.0.0.1:8000/docs`
 
 ---
 
-### 3. Start the Frontend Dashboard
+### 2. Start the Frontend (React Dashboard)
 
 ```bash
 # In a new terminal, navigate to the frontend directory
 cd prodguard-ai
 
-# Install Node dependencies
+# Install dependencies
 npm install
 
-# Start Vite dev server
-npm start
+# Start the Vite development server
+npm run dev
 ```
 
 - Access the Dashboard at: **`http://localhost:5173`**
@@ -219,9 +234,9 @@ npm start
 ## 📡 API Reference
 
 ### `POST /predict`
-Submits machine telemetry and plant parameters for disruption scoring.
+Evaluates physical machine telemetry alongside operational metrics to generate risk scores, root causes, and prescriptive actions.
 
-**Request Payload:**
+**Request Body:**
 ```json
 {
   "Type": "M",
@@ -237,7 +252,7 @@ Submits machine telemetry and plant parameters for disruption scoring.
 }
 ```
 
-**Response Payload:**
+**Response Body:**
 ```json
 {
   "machine_failure_probability": 3.0,
@@ -261,19 +276,35 @@ Submits machine telemetry and plant parameters for disruption scoring.
 
 ---
 
-## 🎭 Pre-Calibrated Demo Scenarios
+## 🎭 Pre-Calibrated Demo Presets
 
-Quickly simulate real plant conditions using the **"Load Preset Scenarios"** dropdown:
+Click **"Load Preset Scenarios"** in the top navigation to immediately demonstrate how the system responds to different plant conditions:
 
-| Scenario | Primary Trigger | Expected Risk Level |
+| Scenario | Trigger Factors | Expected Risk Level |
 |---|---|---|
-| 🟢 **Nominal Operations** | Balanced physical telemetry, minimal delays | **LOW** |
-| 🟡 **Supply Chain Crunch** | 90m material delay + 220-unit queue backlog | **MEDIUM** |
-| 🟠 **Mechanical Tool Wear** | 180-min tool degradation, high torque load | **HIGH** |
-| 🔴 **Compound Multi-Crisis** | Concurrently high torque, labor loss, and material shortage | **CRITICAL** |
+| 🟢 **Nominal Operations** | Balanced physical telemetry, standard production tolerances | **LOW** |
+| 🟡 **Supply Chain Crunch** | 90-minute inbound material lag, high backlog buildup | **MEDIUM** |
+| 🟠 **Mechanical Tool Wear** | Elevated tool wear (180 min), high operating torque | **HIGH** |
+| 🔴 **Compound Multi-Crisis** | Concurrently high torque, labor shortage, and material starvation | **CRITICAL** |
+
+---
+
+## 👥 Role-Based Persona Lenses
+
+ProdGuard AI enables stakeholders to analyze data from their operational vantage point without separate logins:
+
+- **Plant Manager:** High-level OEE impacts, delivery SLA risks, order priority triage, and executive escalation.
+- **Line Supervisor:** Station-level bottleneck pacing, shift staffing reallocations, and buffer availability.
+- **Maintenance Lead:** Mechanical health diagnostics, torque/RPM anomalies, tool wear cycles, and preventive servicing.
+
+---
+
+## 🏆 Hackathon Context
+
+Built for the **TCS Hackathon** to transform manufacturing from reactive firefighting into proactive operational intelligence.
 
 ---
 
 ## 📄 License
 
-This project is licensed under the MIT License for prototype and academic evaluation purposes.
+This project is open-source and intended for academic and demonstration purposes.
